@@ -1,4 +1,5 @@
 import getWikiResults from '@/lib/getWikiResults'
+import Item from './components/Item'
 
 type Props = {
    params: {
@@ -6,12 +7,12 @@ type Props = {
    }
 }
 
-export async function generateMetadata({params: {searchTerm}}: Props){
+export async function generateMetadata({params: {searchTerm}}: Props) {
    const wikiData: Promise<SearchResult> = getWikiResults(searchTerm)
    const data = await wikiData
    const displayTerm = searchTerm.replaceAll('%20', ' ')
 
-   if(!data?.query?.pages) {
+   if (!data?.query?.pages) {
       return {
          title: `${displayTerm} Not Found`
       }
@@ -33,9 +34,9 @@ const SearchResults = async ({params: {searchTerm}}: Props) => {
          {
             results
                ? Object.values(results).map(result => {
-                  return <p>{JSON.stringify(result)}</p>
-               }
-            )
+                     return <Item result={result} key={result.pageid} />
+                  }
+               )
                : <h2 className="p-2 text-xl">{`${searchTerm} Not Found`}</h2>
          }
       </main>
